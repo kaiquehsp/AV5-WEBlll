@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  db-autobots:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: autobots_db
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - autobots-network
+
+  ms-empresas:
+    build: ./ms-empresas
+    ports:
+      - "8081:8081" 
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-empresas 
+      - SERVER_PORT=8081    
+    depends_on:
+      db-autobots:
+        condition: service_healthy 
+    networks:
+      - autobots-network
+
+  ms-clientes:
+    build: ./ms-clientes
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-clientes 
+      - SERVER_PORT=8082     
+    depends_on:
+      db-autobots:
+        condition: service_healthy
+    networks:
+      - autobots-network
+
+  ms-funcionarios:
+    build: ./ms-funcionarios 
+    ports:
+      - "8083:8083"
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-funcionarios 
+      - SERVER_PORT=8083    
+    depends_on:
+      db-autobots:
+        condition: service_healthy
+    networks:
+      - autobots-network
+
+  ms-vendas:
+    build: ./ms-vendas
+    ports:
+      - "8084:8084"
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-vendas 
+      - SERVER_PORT=8084     
+    depends_on:
+      db-autobots:
+        condition: service_healthy
+    networks:
+      - autobots-network
+
+  ms-veiculos:
+    build: ./ms-veiculos
+    ports:
+      - "8085:8085"
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-veiculos 
+      - SERVER_PORT=8085    
+    depends_on:
+      db-autobots:
+        condition: service_healthy
+    networks:
+      - autobots-network
+
+  ms-produtos:
+    build: ./ms-produtos
+    ports:
+      - "8086:8086" 
+    environment:
+      - DB_URL=jdbc:mysql://db-autobots:3306/autobots_db
+      - DB_USER=root
+      - DB_PASS=${DB_PASS}
+      - JWT_SECRET=${JWT_SECRET_KEY}
+      - APP_NAME=ms-produtos 
+      - SERVER_PORT=8086     
+    depends_on:
+      db-autobots:
+        condition: service_healthy
+    networks:
+      - autobots-network
+
+networks:
+  autobots-network:
+    driver: bridge
