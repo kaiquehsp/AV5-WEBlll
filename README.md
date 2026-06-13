@@ -16,9 +16,18 @@
 
 ## 🚀 Como Executar o Projeto (Ambiente Docker)
 
-1. Certifique-se de que o **Docker** e o **Docker Compose** estão instalados e em execução na sua máquina.
+1. Certifique-se de que o **Docker** está instalado e em execução na sua máquina.
 2. Navegue até a pasta raiz do projeto (onde está o arquivo `docker-compose.yml`).
-3. Execute o comando abaixo no terminal para compilar e subir toda a malha de micro-serviços de forma automatizada:
+3. Crie a variavel de ambiente (.env) seguindo o exemplo a seguir:
+```.env
+# Senha de acesso (root) ao banco de dados MySQL
+DB_PASS=teste
+# Chave criptográfica para assinar e validar os tokens JWT
+JWT_SECRET_KEY=ChaveSuperSecretaAutobotsMicroservicos2026VW
+```
+
+
+Depois de criar .env, rode o comando docker
 
 ```bash
 docker-compose up -d --build
